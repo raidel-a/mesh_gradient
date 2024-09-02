@@ -1,0 +1,8 @@
+----------------- TODO -----------------
+- change background
+- add point on double tap
+----------------------------------------
+- add image capture
+- edit image option before save
+----------------------------------------
+- consider using canvas
