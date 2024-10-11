@@ -1,6 +1,7 @@
 //  ColorPalettes.swift
 
 import SwiftUI
+import Combine
 
 struct ColorPalette: Identifiable {
     let id = UUID()
@@ -8,7 +9,7 @@ struct ColorPalette: Identifiable {
     let colors: [Color]
 }
 
-class ColorPaletteManager {
+class ColorPaletteManager: ObservableObject {
     // MARK: Lifecycle
 
     init() {
@@ -131,5 +132,29 @@ extension Color {
         UIColor(self).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 
         return Color(red: 1.0 - red, green: 1.0 - green, blue: 1.0 - blue)
+    }
+}
+
+extension Color: Codable {
+    enum CodingKeys: String, CodingKey {
+        case red, green, blue, alpha
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let r = try container.decode(Double.self, forKey: .red)
+        let g = try container.decode(Double.self, forKey: .green)
+        let b = try container.decode(Double.self, forKey: .blue)
+        let a = try container.decode(Double.self, forKey: .alpha)
+        self.init(red: r, green: g, blue: b, opacity: a)
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        let components = self.components
+        try container.encode(components.red, forKey: .red)
+        try container.encode(components.green, forKey: .green)
+        try container.encode(components.blue, forKey: .blue)
+        try container.encode(components.alpha, forKey: .alpha)
     }
 }

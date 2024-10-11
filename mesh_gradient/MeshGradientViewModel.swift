@@ -3,11 +3,24 @@
 import Combine
 import SwiftUI
 
+struct MeshData: Codable, Identifiable {
+    let id: UUID
+    var name: String
+    var width: Int
+    var height: Int
+    var points: [[SIMD2<Float>]]
+    var colors: [Color]
+    var shadowEnabled: Bool
+    var shadowColor: Color
+    var shadowRadius: CGFloat
+    var shadowOffset: CGSize
+}
+
 class MeshGradientViewModel: ObservableObject {
     // MARK: Internal
 
-    @Published var meshWidth: Int = 3
-    @Published var meshHeight: Int = 3
+    @Published var meshWidth: Int = 2
+    @Published var meshHeight: Int = 2
     @Published var points: [[SIMD2<Float>]] = []
     @Published var showPoints = true
     @Published var currentColors: [Color] = []
@@ -34,12 +47,50 @@ class MeshGradientViewModel: ObservableObject {
     
     @Published var averageColor: Color = .clear
 
-    func initializeMesh() {
-        points = (0 ..< meshHeight).map { y in
-            (0 ..< meshWidth).map { x in
-                SIMD2<Float>(Float(x) / Float(max(1, meshWidth - 1)), Float(y) / Float(max(1, meshHeight - 1)))
+    @Published var currentMesh: MeshData
+    @Published var savedMeshes: [MeshData] = []
+    
+    @Published var selectedAspectRatio: AspectRatio = .ratio16_9
+    
+    init() {
+        // Initialize with default values
+        self.currentMesh = MeshData(
+            id: UUID(),
+            name: "Default Mesh",
+            width: 4,
+            height: 5,
+            points: Self.generateDefaultPoints(width: 4, height: 4),
+            colors: [Color.blue, Color.green, Color.red, Color.yellow],
+            shadowEnabled: false,
+            shadowColor: .black,
+            shadowRadius: 10,
+            shadowOffset: CGSize(width: 0, height: 0)
+        )
+        
+        self.meshWidth = currentMesh.width
+        self.meshHeight = currentMesh.height
+        self.points = currentMesh.points
+        self.currentColors = currentMesh.colors
+        self.shadowEnabled = currentMesh.shadowEnabled
+        self.shadowColor = currentMesh.shadowColor
+        self.shadowRadius = currentMesh.shadowRadius
+        self.shadowOffset = currentMesh.shadowOffset
+
+        loadMeshesFromDisk()
+        initializeMesh()
+    }
+
+    private static func generateDefaultPoints(width: Int, height: Int) -> [[SIMD2<Float>]] {
+        (0..<height).map { y in
+            (0..<width).map { x in
+                SIMD2<Float>(Float(x) / Float(width - 1), Float(y) / Float(height - 1))
             }
         }
+    }
+
+    func initializeMesh() {
+        // This method can now focus on any additional initialization
+        // that's not covered in the init() method
         updateColors()
     }
 
@@ -147,6 +198,7 @@ class MeshGradientViewModel: ObservableObject {
         let index = y * meshWidth + x
         if index < currentColors.count {
             currentColors[index] = color
+            objectWillChange.send()
         }
     }
 
@@ -154,8 +206,18 @@ class MeshGradientViewModel: ObservableObject {
         guard x < meshWidth && y < meshHeight else { return }
         let index = y * meshWidth + x
         if index < currentColors.count {
-            currentColors[index] = .white
+            let palette = ColorPaletteManager.shared.palettes[selectedPaletteIndex].colors
+            currentColors[index] = palette[index % palette.count]
+            objectWillChange.send()
         }
+    }
+
+    func resetPointPosition(x: Int, y: Int) {
+        guard x < meshWidth && y < meshHeight else { return }
+        let normalizedX = Float(x) / Float(meshWidth - 1)
+        let normalizedY = Float(y) / Float(meshHeight - 1)
+        points[y][x] = SIMD2(normalizedX, normalizedY)
+        objectWillChange.send()
     }
 
     func startColorAnimation() {
@@ -178,9 +240,61 @@ class MeshGradientViewModel: ObservableObject {
         showColorPicker = true
     }
 
+    func saveMesh(name: String) {
+        let newMesh = MeshData(
+            id: UUID(),
+            name: name,
+            width: meshWidth,
+            height: meshHeight,
+            points: points,
+            colors: currentColors,
+            shadowEnabled: shadowEnabled,
+            shadowColor: shadowColor,
+            shadowRadius: shadowRadius,
+            shadowOffset: shadowOffset
+        )
+        savedMeshes.append(newMesh)
+        saveMeshesToDisk()
+    }
+
+    func loadMesh(_ mesh: MeshData) {
+        currentMesh = mesh
+        // Update other properties based on loaded mesh
+        updateMeshFromCurrentMesh()
+    }
+
+    private func updateMeshFromCurrentMesh() {
+        meshWidth = currentMesh.width
+        meshHeight = currentMesh.height
+        points = currentMesh.points
+        currentColors = currentMesh.colors
+        shadowEnabled = currentMesh.shadowEnabled
+        shadowColor = currentMesh.shadowColor
+        shadowRadius = currentMesh.shadowRadius
+        shadowOffset = currentMesh.shadowOffset
+    }
+
+    private func saveMeshesToDisk() {
+        do {
+            let data = try JSONEncoder().encode(savedMeshes)
+            UserDefaults.standard.set(data, forKey: "savedMeshes")
+        } catch {
+            print("Failed to save meshes: \(error)")
+        }
+    }
+
+    func loadMeshesFromDisk() {
+        guard let data = UserDefaults.standard.data(forKey: "savedMeshes") else { return }
+        do {
+            savedMeshes = try JSONDecoder().decode([MeshData].self, from: data)
+        } catch {
+            print("Failed to load meshes: \(error)")
+        }
+    }
+
     // MARK: Private
 
-    private let maxMeshDimension = 10
+    private let maxMeshDimension = 20
     private let minMeshDimension = 2
 
     private var colorAnimationTimer: AnyCancellable?
@@ -265,5 +379,25 @@ class MeshGradientViewModel: ObservableObject {
 extension Array {
     subscript(safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
+    }
+}
+
+enum AspectRatio: String, CaseIterable, Identifiable {
+    case ratio16_9 = "16:9"
+    case ratio4_3 = "4:3"
+    case ratio1_1 = "1:1"
+    case ratio3_2 = "3:2"
+    case ratio21_9 = "21:9"
+    
+    var id: String { self.rawValue }
+    
+    var ratio: CGFloat {
+        switch self {
+        case .ratio16_9: return 16.0 / 9.0
+        case .ratio4_3: return 4.0 / 3.0
+        case .ratio1_1: return 1.0
+        case .ratio3_2: return 3.0 / 2.0
+        case .ratio21_9: return 21.0 / 9.0
+        }
     }
 }

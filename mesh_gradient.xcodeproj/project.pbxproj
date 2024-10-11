@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 73;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,9 @@
 		3100F1562C8421F900167DFD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3100F1552C8421F900167DFD /* SettingsView.swift */; };
 		3100F1612C8584FA00167DFD /* TODO.MD in Resources */ = {isa = PBXBuildFile; fileRef = 3100F1602C8584EE00167DFD /* TODO.MD */; };
 		31A5F01D2C830443003A13FC /* ColorPalettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A5F01C2C830443003A13FC /* ColorPalettes.swift */; };
+		31B9A1BC2CB85C0E00D3E075 /* MeshGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B9A1BB2CB85C0E00D3E075 /* MeshGradientView.swift */; };
+		31B9A1BE2CB85C2400D3E075 /* ControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B9A1BD2CB85C2400D3E075 /* ControlsView.swift */; };
+		31B9A1C02CB85C3900D3E075 /* ColorPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B9A1BF2CB85C3900D3E075 /* ColorPickerSheet.swift */; };
 		31C88CFC2C82BE20003D3686 /* mesh_gradientApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C88CFB2C82BE20003D3686 /* mesh_gradientApp.swift */; };
 		31C88CFE2C82BE20003D3686 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C88CFD2C82BE20003D3686 /* ContentView.swift */; };
 		31C88D002C82BE21003D3686 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 31C88CFF2C82BE21003D3686 /* Assets.xcassets */; };
@@ -22,42 +25,15 @@
 		3100F1552C8421F900167DFD /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3100F1602C8584EE00167DFD /* TODO.MD */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.MD; sourceTree = "<group>"; };
 		31A5F01C2C830443003A13FC /* ColorPalettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettes.swift; sourceTree = "<group>"; };
+		31B9A1BB2CB85C0E00D3E075 /* MeshGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeshGradientView.swift; sourceTree = "<group>"; };
+		31B9A1BD2CB85C2400D3E075 /* ControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlsView.swift; sourceTree = "<group>"; };
+		31B9A1BF2CB85C3900D3E075 /* ColorPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerSheet.swift; sourceTree = "<group>"; };
 		31C88CF82C82BE20003D3686 /* mesh_gradient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mesh_gradient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		31C88CFB2C82BE20003D3686 /* mesh_gradientApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mesh_gradientApp.swift; sourceTree = "<group>"; };
 		31C88CFD2C82BE20003D3686 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		31C88CFF2C82BE21003D3686 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		31C88D022C82BE21003D3686 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		3100F15A2C84D97600167DFD /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				2.txt,
-				4.txt,
-				BottomSheetView.swift,
-				PointColorMenu.swift,
-				"Sheet+Extensions.swift",
-				"UIDevice+Extension.swift",
-			);
-			target = 31C88CF72C82BE20003D3686 /* mesh_gradient */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		3100F15B2C84D97E00167DFD /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 31C88CF42C82BE20003D3686 /* Sources */;
-			membershipExceptions = (
-				1.txt,
-				3.txt,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		3100F1592C84D96A00167DFD /* .old */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (3100F15A2C84D97600167DFD /* PBXFileSystemSynchronizedBuildFileExceptionSet */, 3100F15B2C84D97E00167DFD /* PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = .old; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		31C88CF52C82BE20003D3686 /* Frameworks */ = {
@@ -73,7 +49,6 @@
 		31C88CEF2C82BE20003D3686 = {
 			isa = PBXGroup;
 			children = (
-				3100F1592C84D96A00167DFD /* .old */,
 				31C88CFA2C82BE20003D3686 /* mesh_gradient */,
 				31C88CF92C82BE20003D3686 /* Products */,
 			);
@@ -93,6 +68,9 @@
 				3100F1602C8584EE00167DFD /* TODO.MD */,
 				31A5F01C2C830443003A13FC /* ColorPalettes.swift */,
 				31C88CFD2C82BE20003D3686 /* ContentView.swift */,
+				31B9A1BB2CB85C0E00D3E075 /* MeshGradientView.swift */,
+				31B9A1BD2CB85C2400D3E075 /* ControlsView.swift */,
+				31B9A1BF2CB85C3900D3E075 /* ColorPickerSheet.swift */,
 				31C88CFB2C82BE20003D3686 /* mesh_gradientApp.swift */,
 				3100F1532C84218E00167DFD /* MeshGradientViewModel.swift */,
 				3100F1552C8421F900167DFD /* SettingsView.swift */,
@@ -146,6 +124,7 @@
 				};
 			};
 			buildConfigurationList = 31C88CF32C82BE20003D3686 /* Build configuration list for PBXProject "mesh_gradient" */;
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -153,7 +132,6 @@
 				Base,
 			);
 			mainGroup = 31C88CEF2C82BE20003D3686;
-			preferredProjectObjectVersion = 60;
 			productRefGroup = 31C88CF92C82BE20003D3686 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -184,8 +162,11 @@
 				31C88CFE2C82BE20003D3686 /* ContentView.swift in Sources */,
 				31C88CFC2C82BE20003D3686 /* mesh_gradientApp.swift in Sources */,
 				3100F1562C8421F900167DFD /* SettingsView.swift in Sources */,
+				31B9A1BC2CB85C0E00D3E075 /* MeshGradientView.swift in Sources */,
 				3100F1542C84218E00167DFD /* MeshGradientViewModel.swift in Sources */,
+				31B9A1BE2CB85C2400D3E075 /* ControlsView.swift in Sources */,
 				31A5F01D2C830443003A13FC /* ColorPalettes.swift in Sources */,
+				31B9A1C02CB85C3900D3E075 /* ColorPickerSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

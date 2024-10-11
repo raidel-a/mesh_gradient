@@ -6,6 +6,8 @@ struct SettingsView: View {
     // MARK: Internal
 
     @ObservedObject var viewModel: MeshGradientViewModel
+    @StateObject private var paletteManager = ColorPaletteManager.shared
+    @State private var meshName: String = ""
 
     var body: some View {
         NavigationView {
@@ -31,6 +33,15 @@ struct SettingsView: View {
                 }
                 .listRowBackground(Color.white.opacity(0.2))
 
+                Section(header: Text("Frame")) {
+                    Picker("Aspect Ratio", selection: $viewModel.selectedAspectRatio) {
+                        ForEach(AspectRatio.allCases) { ratio in
+                            Text(ratio.rawValue).tag(ratio)
+                        }
+                    }
+                }
+                .listRowBackground(Color.white.opacity(0.2))
+                
                 Section(header: Text("Color")) {
                     ColorPicker("Base Color", selection: $paletteManager.baseColor)
                         .onChange(of: paletteManager.baseColor) { _ in
@@ -90,13 +101,33 @@ struct SettingsView: View {
                         }
                     }
                 }.listRowBackground(Color.white.opacity(0.2))
+
+                Section(header: Text("Mesh Management")) {
+                    TextField("Mesh Name", text: $meshName)
+                    Button("Save Current Mesh") {
+                        viewModel.saveMesh(name: meshName)
+                        meshName = ""
+                    }
+                    
+                    ForEach(viewModel.savedMeshes) { mesh in
+                        HStack {
+                            Text(mesh.name)
+                            Spacer()
+                            Button("Load") {
+                                viewModel.loadMesh(mesh)
+                            }
+                        }
+                    }
+                }
+                .listRowBackground(Color.white.opacity(0.2))
+
             }.padding(.top)
+            .scrollContentBackground(.hidden)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbarBackground(.hidden, for: .navigationBar)
+//            .toolbarBackground(.visible, for: .navigationBar)
         }
-//        .background(.thinMaterial)
-        .scrollContentBackground(.hidden)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
-
-    // MARK: Private
-
-    @State private var paletteManager = ColorPaletteManager.shared
 }
